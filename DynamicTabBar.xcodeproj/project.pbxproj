@@ -13,7 +13,6 @@
 		1C5C18A8281B53B10019AFF2 /* DynamicTabBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C18A7281B53B10019AFF2 /* DynamicTabBarTests.swift */; };
 		1C5C18B2281B53B10019AFF2 /* DynamicTabBarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C18B1281B53B10019AFF2 /* DynamicTabBarUITests.swift */; };
 		1C5C18B4281B53B10019AFF2 /* DynamicTabBarUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C18B3281B53B10019AFF2 /* DynamicTabBarUITestsLaunchTests.swift */; };
-		1C5C18C1281B54360019AFF2 /* DynamicTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C18C0281B54360019AFF2 /* DynamicTabBar.swift */; };
 		1C5C18C3281B603D0019AFF2 /* DynamicTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C18C2281B603D0019AFF2 /* DynamicTabView.swift */; };
 		1C5C18C5281B604C0019AFF2 /* DynamicTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C18C4281B604C0019AFF2 /* DynamicTabItem.swift */; };
 		1C5C18C7281B69640019AFF2 /* DynamicTabItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C18C6281B69640019AFF2 /* DynamicTabItemView.swift */; };
@@ -46,7 +45,6 @@
 		1C5C18AD281B53B10019AFF2 /* DynamicTabBarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DynamicTabBarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C5C18B1281B53B10019AFF2 /* DynamicTabBarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTabBarUITests.swift; sourceTree = "<group>"; };
 		1C5C18B3281B53B10019AFF2 /* DynamicTabBarUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTabBarUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		1C5C18C0281B54360019AFF2 /* DynamicTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTabBar.swift; sourceTree = "<group>"; };
 		1C5C18C2281B603D0019AFF2 /* DynamicTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTabView.swift; sourceTree = "<group>"; };
 		1C5C18C4281B604C0019AFF2 /* DynamicTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTabItem.swift; sourceTree = "<group>"; };
 		1C5C18C6281B69640019AFF2 /* DynamicTabItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTabItemView.swift; sourceTree = "<group>"; };
@@ -101,7 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				1C5C1896281B53AF0019AFF2 /* DynamicTabBarApp.swift */,
-				1C5C18C0281B54360019AFF2 /* DynamicTabBar.swift */,
 				1C5C18C2281B603D0019AFF2 /* DynamicTabView.swift */,
 				1C5C18C4281B604C0019AFF2 /* DynamicTabItem.swift */,
 				1C5C18C6281B69640019AFF2 /* DynamicTabItemView.swift */,
@@ -267,7 +264,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C5C18C5281B604C0019AFF2 /* DynamicTabItem.swift in Sources */,
-				1C5C18C1281B54360019AFF2 /* DynamicTabBar.swift in Sources */,
 				1C5C18C3281B603D0019AFF2 /* DynamicTabView.swift in Sources */,
 				1C5C18C7281B69640019AFF2 /* DynamicTabItemView.swift in Sources */,
 				1C5C1897281B53AF0019AFF2 /* DynamicTabBarApp.swift in Sources */,

@@ -16,10 +16,3 @@ struct DynamicTabItem: Hashable {
     static let profile = DynamicTabItem(iconName: "person.fill", title: "Profile")
     static let messages = DynamicTabItem(iconName: "message.fill", title: "Messages")
 }
-
-struct DynamicTabItemsPreferenceKey: PreferenceKey {
-    static var defaultValue: [DynamicTabItem] = []
-    static func reduce(value: inout [DynamicTabItem], nextValue: () -> [DynamicTabItem]) {
-        value += nextValue()
-    }
-}

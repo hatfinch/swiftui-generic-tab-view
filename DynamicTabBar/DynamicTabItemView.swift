@@ -13,17 +13,20 @@ struct DynamicTabItemView: View {
 
     var body: some View {
         VStack {
-            Image(systemName: tab.iconName)
-                .font(.subheadline)
-            Text(tab.title)
-                .font(.system(size: 10, weight: .semibold, design: .rounded))
+            Button {
+                selectionWrapper.selection = tab
+            } label: {
+                VStack {
+                    Image(systemName: tab.iconName)
+                        .font(.subheadline)
+                    Text(tab.title)
+                        .font(.system(size: 10, weight: .semibold, design: .rounded))
+                }
+            }
         }
         .foregroundColor(selectionWrapper.selection == tab ? .accentColor : .gray)
         .padding(.vertical, 8)
         .frame(maxWidth: .infinity)
-        .onTapGesture {
-            selectionWrapper.selection = tab
-        }
     }
 }
 
@@ -31,8 +34,6 @@ struct DynamicTabItemViewModifer: ViewModifier {
     let tab: DynamicTabItem
     @EnvironmentObject var selectionWrapper: SelectionWrapper
     
-    @State var loaded: Bool = false
-
     @ViewBuilder func body(content: Content) -> some View {
 //        approach1(content: content)
         approach2(content: content)
@@ -50,6 +51,13 @@ struct DynamicTabItemViewModifer: ViewModifier {
         } else {
             Color.clear.tabPreference(tab)
         }
+    }
+}
+
+struct DynamicTabItemsPreferenceKey: PreferenceKey {
+    static var defaultValue: [DynamicTabItem] = []
+    static func reduce(value: inout [DynamicTabItem], nextValue: () -> [DynamicTabItem]) {
+        value += nextValue()
     }
 }
 

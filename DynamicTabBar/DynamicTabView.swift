@@ -11,6 +11,21 @@ class SelectionWrapper: ObservableObject {
     @Published var selection: DynamicTabItem? = nil
 }
 
+struct DynamicTabBar: View {
+
+    let tabs: [DynamicTabItem]
+
+    var body: some View {
+        HStack {
+            ForEach(tabs, id: \.self) { tab in
+                DynamicTabItemView(tab: tab)
+            }
+        }
+        .padding(6)
+        .background(Color.white.ignoresSafeArea(edges: .bottom))
+    }
+}
+
 struct DynamicTabView<Content: View>: View {
 
     @Binding var selection: DynamicTabItem
@@ -29,7 +44,7 @@ struct DynamicTabView<Content: View>: View {
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .safeAreaInset(edge: .bottom, spacing: 0) {
-                    DynamicTabBar(tabs: tabs, selection: $selection)
+                    DynamicTabBar(tabs: tabs)
                 }
         }
         .onPreferenceChange(DynamicTabItemsPreferenceKey.self, perform: { value in
@@ -37,12 +52,15 @@ struct DynamicTabView<Content: View>: View {
         })
         .environmentObject(selectionWrapper)
         .onChange(of: selection) { newValue in
-            print("HERE 1")
             selectionWrapper.selection = newValue
         }
+        .onChange(of: selectionWrapper.selection) { newValue in 
+            if let newValue = newValue {
+                selection = newValue
+            }
+        }
         .onAppear {
-            self.selectionWrapper.selection = selection
-
+            selectionWrapper.selection = selection
         }
     }
 }
