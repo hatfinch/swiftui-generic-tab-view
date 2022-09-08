@@ -7,12 +7,39 @@
 
 import SwiftUI
 
+struct DynamicTabItem: Hashable {
+    let iconName: String
+    let title: String
+}
+
 class SelectionWrapper: ObservableObject {
     @Published var selection: DynamicTabItem? = nil
 }
 
-struct DynamicTabBar: View {
+struct DynamicTabItemView: View {
+    @EnvironmentObject var selectionWrapper: SelectionWrapper
+    let tab: DynamicTabItem
 
+    var body: some View {
+        VStack {
+            Button {
+                selectionWrapper.selection = tab
+            } label: {
+                VStack {
+                    Image(systemName: tab.iconName)
+                        .font(.subheadline)
+                    Text(tab.title)
+                        .font(.system(size: 10, weight: .semibold, design: .rounded))
+                }
+            }
+        }
+        .foregroundColor(selectionWrapper.selection == tab ? .accentColor : .gray)
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity)
+    }
+}
+
+struct DynamicTabBar: View {
     let tabs: [DynamicTabItem]
 
     var body: some View {
@@ -65,45 +92,42 @@ struct DynamicTabView<Content: View>: View {
     }
 }
 
-struct DemoTab: View {
-
-    let text: String
-
-    init(text: String) {
-        self.text = text
-        print("init \(text)")
+struct DynamicTabItemViewModifer: ViewModifier {
+    let tab: DynamicTabItem
+    @EnvironmentObject var selectionWrapper: SelectionWrapper
+    
+    @ViewBuilder func body(content: Content) -> some View {
+//        approach1(content: content)
+        approach2(content: content)
     }
 
-    var body: some View {
-        List(1..<21) { n in
-            Text("\(text) \(n)")
-        }
-        .onAppear {
-            print("onAppear \(text)")
-        }
+    @ViewBuilder func approach1(content: Content) -> some View {
+        content
+            .opacity(selectionWrapper.selection == tab ? 1.0 : 0.0)
+            .tabPreference(tab)
     }
-}
 
-struct DemoTabView: View {
-    @State var selection: DynamicTabItem = .home
-
-    var body: some View {
-        DynamicTabView(selection: $selection) {
-            DemoTab(text: "First")
-                .dynamicTabItem(tab: .home)
-            DemoTab(text: "Second")
-                .dynamicTabItem(tab: .messages)
-            DemoTab(text: "Third")
-                .dynamicTabItem(tab: .favorites)
-            DemoTab(text: "Fourth")
-                .dynamicTabItem(tab: .profile)
+    @ViewBuilder func approach2(content: Content) -> some View {
+        if selectionWrapper.selection == tab {
+            content.tabPreference(tab)
+        } else {
+            Color.clear.tabPreference(tab)
         }
     }
 }
 
-struct DynamicTabView_Previews: PreviewProvider {
+struct DynamicTabItemsPreferenceKey: PreferenceKey {
+    static var defaultValue: [DynamicTabItem] = []
+    static func reduce(value: inout [DynamicTabItem], nextValue: () -> [DynamicTabItem]) {
+        value += nextValue()
+    }
+}
 
-    static var previews: some View {
-        DemoTabView()
+extension View {
+    func tabPreference(_ tab: DynamicTabItem) -> some View {
+        preference(key: DynamicTabItemsPreferenceKey.self, value: [tab])
+    }
+    func dynamicTabItem(tab: DynamicTabItem) -> some View {
+        modifier(DynamicTabItemViewModifer(tab: tab))
     }
 }
