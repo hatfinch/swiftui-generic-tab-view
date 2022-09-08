@@ -7,28 +7,27 @@
 
 import SwiftUI
 
-extension DynamicTabItem {
+@main
+struct DynamicTabBarApp: App {
+    
     static let home = DynamicTabItem(iconName: "house.fill", title: "Home")
     static let favorites = DynamicTabItem(iconName: "heart.fill", title: "Favorites")
     static let profile = DynamicTabItem(iconName: "person.fill", title: "Profile")
     static let messages = DynamicTabItem(iconName: "message.fill", title: "Messages")
-}
 
-@main
-struct DynamicTabBarApp: App {
-    @State var selection: DynamicTabItem = .home
+    @State var selection: DynamicTabItem = home
 
     var body: some Scene {
         WindowGroup {
             DynamicTabView(selection: $selection) {
                 DemoTab(text: "First")
-                    .dynamicTabItem(tab: .home)
+                    .dynamicTabItem(DynamicTabBarApp.home)
                 DemoTab(text: "Second")
-                    .dynamicTabItem(tab: .messages)
+                    .dynamicTabItem(DynamicTabBarApp.messages)
                 DemoTab(text: "Third")
-                    .dynamicTabItem(tab: .favorites)
+                    .dynamicTabItem(DynamicTabBarApp.favorites)
                 DemoTab(text: "Fourth")
-                    .dynamicTabItem(tab: .profile)
+                    .dynamicTabItem(DynamicTabBarApp.profile)
             }
         }
     }
@@ -49,6 +48,9 @@ struct DemoTab: View {
         }
         .onAppear {
             print("onAppear \(text)")
+        }
+        .onDisappear {
+            print("onDisappear \(text)")
         }
     }
 }

@@ -127,7 +127,7 @@ extension View {
     func tabPreference(_ tab: DynamicTabItem) -> some View {
         preference(key: DynamicTabItemsPreferenceKey.self, value: [tab])
     }
-    func dynamicTabItem(tab: DynamicTabItem) -> some View {
+    func dynamicTabItem(_ tab: DynamicTabItem) -> some View {
         modifier(DynamicTabItemViewModifer(tab: tab))
     }
 }
