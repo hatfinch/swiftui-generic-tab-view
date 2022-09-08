@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct DynamicTabItem: Hashable {
-    let iconName: String
     let title: String
+    let systemName: String
+    
+    init(_ title: String, systemName: String) {
+        self.title = title
+        self.systemName = systemName
+    }
 }
 
 class SelectionWrapper: ObservableObject {
@@ -25,7 +30,7 @@ struct DynamicTabItemButton: View {
             selectionWrapper.selection = tab
         } label: {
             VStack {
-                Image(systemName: tab.iconName)
+                Image(systemName: tab.systemName)
                     .font(.subheadline)
                 Text(tab.title)
                     .font(.system(size: 10, weight: .semibold, design: .rounded))
