@@ -19,15 +19,17 @@ struct DynamicTabBarApp: App {
 
     var body: some Scene {
         WindowGroup {
-            DynamicTabView(selection: $selection) {
-                DemoTab(text: "First")
-                    .dynamicTabItem(DynamicTabBarApp.home)
-                DemoTab(text: "Second")
-                    .dynamicTabItem(DynamicTabBarApp.messages)
-                DemoTab(text: "Third")
-                    .dynamicTabItem(DynamicTabBarApp.favorites)
-                DemoTab(text: "Fourth")
-                    .dynamicTabItem(DynamicTabBarApp.profile)
+            NavigationStack {
+                DynamicTabView(selection: $selection) {
+                    DemoTab(text: "First")
+                        .dynamicTabItem(DynamicTabBarApp.home)
+                    DemoTab(text: "Second")
+                        .dynamicTabItem(DynamicTabBarApp.messages)
+                    DemoTab(text: "Third")
+                        .dynamicTabItem(DynamicTabBarApp.favorites)
+                    DemoTab(text: "Fourth")
+                        .dynamicTabItem(DynamicTabBarApp.profile)
+                }
             }
         }
     }
@@ -46,6 +48,8 @@ struct DemoTab: View {
         List(1..<21) { n in
             Text("\(text) \(n)")
         }
+//        .navigationTitle(text)
+//        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             print("onAppear \(text)")
         }

@@ -97,19 +97,8 @@ struct DynamicTabItemViewModifer: ViewModifier {
     @EnvironmentObject var selectionWrapper: SelectionWrapper
     
     @ViewBuilder func body(content: Content) -> some View {
-//        approach1(content: content)
-        approach2(content: content)
-    }
-
-    @ViewBuilder func approach1(content: Content) -> some View {
-        content
-            .opacity(selectionWrapper.selection == tab ? 1.0 : 0.0)
-            .tabPreference(tab)
-    }
-
-    @ViewBuilder func approach2(content: Content) -> some View {
         if selectionWrapper.selection == tab {
-            content.tabPreference(tab)
+            content.tabPreference(tab).navigationTitle(tab.title)
         } else {
             Color.clear.tabPreference(tab)
         }
