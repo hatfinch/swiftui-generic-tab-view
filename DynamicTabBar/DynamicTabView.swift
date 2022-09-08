@@ -7,11 +7,17 @@
 
 import SwiftUI
 
-struct DynamicTabView<Content:View>: View {
+class SelectionWrapper: ObservableObject {
+    @Published var selection: DynamicTabItem? = nil
+}
+
+struct DynamicTabView<Content: View>: View {
 
     @Binding var selection: DynamicTabItem
     let content: Content
     @State private var tabs: [DynamicTabItem] = []
+
+    @StateObject var selectionWrapper = SelectionWrapper()
 
     init(selection: Binding<DynamicTabItem>, @ViewBuilder content: () -> Content) {
         self._selection = selection
@@ -29,6 +35,15 @@ struct DynamicTabView<Content:View>: View {
         .onPreferenceChange(DynamicTabItemsPreferenceKey.self, perform: { value in
             self.tabs = value
         })
+        .environmentObject(selectionWrapper)
+        .onChange(of: selection) { newValue in
+            print("HERE 1")
+            selectionWrapper.selection = newValue
+        }
+        .onAppear {
+            self.selectionWrapper.selection = selection
+
+        }
     }
 }
 
@@ -57,13 +72,13 @@ struct DemoTabView: View {
     var body: some View {
         DynamicTabView(selection: $selection) {
             DemoTab(text: "First")
-                .dynamicTabItem(tab: .home, selection: $selection)
+                .dynamicTabItem(tab: .home)
             DemoTab(text: "Second")
-                .dynamicTabItem(tab: .messages, selection: $selection)
+                .dynamicTabItem(tab: .messages)
             DemoTab(text: "Third")
-                .dynamicTabItem(tab: .favorites, selection: $selection)
+                .dynamicTabItem(tab: .favorites)
             DemoTab(text: "Fourth")
-                .dynamicTabItem(tab: .profile, selection: $selection)
+                .dynamicTabItem(tab: .profile)
         }
     }
 }

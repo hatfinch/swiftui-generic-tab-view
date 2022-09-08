@@ -11,11 +11,12 @@ struct DynamicTabBar: View {
 
     let tabs: [DynamicTabItem]
     @Binding var selection: DynamicTabItem
+    @EnvironmentObject var selectionWrapper: SelectionWrapper
 
     var body: some View {
         HStack {
             ForEach(tabs, id: \.self) { tab in
-                DynamicTabItemView(selection: $selection, tab: tab)
+                DynamicTabItemView(tab: tab)
             }
         }
         .padding(6)
