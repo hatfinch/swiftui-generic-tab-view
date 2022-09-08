@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct DynamicTabBarApp: App {
-    
+
     static let home = DynamicTabItem(iconName: "house.fill", title: "Home")
+    static let messages = DynamicTabItem(iconName: "message.fill", title: "Messages")
     static let favorites = DynamicTabItem(iconName: "heart.fill", title: "Favorites")
     static let profile = DynamicTabItem(iconName: "person.fill", title: "Profile")
-    static let messages = DynamicTabItem(iconName: "message.fill", title: "Messages")
 
     @State var selection: DynamicTabItem = home
 

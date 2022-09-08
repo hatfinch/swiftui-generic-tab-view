@@ -16,21 +16,19 @@ class SelectionWrapper: ObservableObject {
     @Published var selection: DynamicTabItem? = nil
 }
 
-struct DynamicTabItemView: View {
+struct DynamicTabItemButton: View {
     @EnvironmentObject var selectionWrapper: SelectionWrapper
     let tab: DynamicTabItem
 
     var body: some View {
-        VStack {
-            Button {
-                selectionWrapper.selection = tab
-            } label: {
-                VStack {
-                    Image(systemName: tab.iconName)
-                        .font(.subheadline)
-                    Text(tab.title)
-                        .font(.system(size: 10, weight: .semibold, design: .rounded))
-                }
+        Button {
+            selectionWrapper.selection = tab
+        } label: {
+            VStack {
+                Image(systemName: tab.iconName)
+                    .font(.subheadline)
+                Text(tab.title)
+                    .font(.system(size: 10, weight: .semibold, design: .rounded))
             }
         }
         .foregroundColor(selectionWrapper.selection == tab ? .accentColor : .gray)
@@ -45,7 +43,7 @@ struct DynamicTabBar: View {
     var body: some View {
         HStack {
             ForEach(tabs, id: \.self) { tab in
-                DynamicTabItemView(tab: tab)
+                DynamicTabItemButton(tab: tab)
             }
         }
         .padding(6)
@@ -92,7 +90,7 @@ struct DynamicTabView<Content: View>: View {
     }
 }
 
-struct DynamicTabItemViewModifer: ViewModifier {
+struct DynamicTabItemModifer: ViewModifier {
     let tab: DynamicTabItem
     @EnvironmentObject var selectionWrapper: SelectionWrapper
     
@@ -117,6 +115,6 @@ extension View {
         preference(key: DynamicTabItemsPreferenceKey.self, value: [tab])
     }
     func dynamicTabItem(_ tab: DynamicTabItem) -> some View {
-        modifier(DynamicTabItemViewModifer(tab: tab))
+        modifier(DynamicTabItemModifer(tab: tab))
     }
 }
