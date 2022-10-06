@@ -14,6 +14,14 @@ struct DynamicTabBarApp: App {
     static let messages = DynamicTabItem("Messages", systemName: "message.fill")
     static let favorites = DynamicTabItem("Favorites", systemName: "heart.fill")
     static let profile = DynamicTabItem("Profile", systemName: "person.fill")
+    static let trash = DynamicTabItem("Trash", systemName: "trash.fill")
+    static let trays = DynamicTabItem("Trays", systemName: "tray.fill")
+    static let trophies = DynamicTabItem("Trophies", systemName: "trophy.fill")
+    static let umbrellas = DynamicTabItem("Umbrellas", systemName: "umbrella.fill")
+    static let flames = DynamicTabItem("Flames", systemName: "flame.fill")
+    static let fleurons = DynamicTabItem("Fleurons", systemName: "fleuron.fill")
+    static let carts = DynamicTabItem("Carts", systemName: "cart.fill")
+    static let hammers = DynamicTabItem("Hammers", systemName: "hammer.fill")
 
     @State var selection: DynamicTabItem = home
 
@@ -21,14 +29,36 @@ struct DynamicTabBarApp: App {
         WindowGroup {
             NavigationStack {
                 DynamicTabView(selection: $selection) {
-                    DemoTab(text: "First")
-                        .dynamicTabItem(DynamicTabBarApp.home)
-                    DemoTab(text: "Second")
-                        .dynamicTabItem(DynamicTabBarApp.messages)
-                    DemoTab(text: "Third")
-                        .dynamicTabItem(DynamicTabBarApp.favorites)
-                    DemoTab(text: "Fourth")
-                        .dynamicTabItem(DynamicTabBarApp.profile)
+                    Group {
+                        DemoTab(text: "First")
+                            .dynamicTabItem(DynamicTabBarApp.home)
+                        DemoTab(text: "Second")
+                            .dynamicTabItem(DynamicTabBarApp.messages)
+                        DemoTab(text: "Third")
+                            .dynamicTabItem(DynamicTabBarApp.favorites)
+                        DemoTab(text: "Fourth")
+                            .dynamicTabItem(DynamicTabBarApp.profile)
+                        DemoTab(text: "Fifth")
+                            .dynamicTabItem(DynamicTabBarApp.trash)
+                    }
+                    Group {
+                        DemoTab(text: "Sixth")
+                            .dynamicTabItem(DynamicTabBarApp.trays)
+                        DemoTab(text: "Seventh")
+                            .dynamicTabItem(DynamicTabBarApp.trophies)
+                        DemoTab(text: "Eighth")
+                            .dynamicTabItem(DynamicTabBarApp.umbrellas)
+                        DemoTab(text: "Ninth")
+                            .dynamicTabItem(DynamicTabBarApp.flames)
+                        DemoTab(text: "Tenth")
+                            .dynamicTabItem(DynamicTabBarApp.fleurons)
+                    }
+                    Group {
+                        DemoTab(text: "Eleventh")
+                            .dynamicTabItem(DynamicTabBarApp.carts)
+                        DemoTab(text: "Twelfth")
+                            .dynamicTabItem(DynamicTabBarApp.hammers)
+                    }
                 }
             }
         }

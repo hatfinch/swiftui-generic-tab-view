@@ -21,6 +21,20 @@ class SelectionWrapper: ObservableObject {
     @Published var selection: DynamicTabItem? = nil
 }
 
+struct DynamicTabButtonLabel: View {
+    let text: String
+    let systemName: String
+
+    var body: some View {
+        VStack {
+            Image(systemName: systemName)
+                .font(.subheadline)
+            Text(text)
+                .font(.system(size: 10, weight: .semibold, design: .rounded))
+        }
+    }
+}
+
 struct DynamicTabItemButton: View {
     @EnvironmentObject var selectionWrapper: SelectionWrapper
     let tab: DynamicTabItem
@@ -29,12 +43,7 @@ struct DynamicTabItemButton: View {
         Button {
             selectionWrapper.selection = tab
         } label: {
-            VStack {
-                Image(systemName: tab.systemName)
-                    .font(.subheadline)
-                Text(tab.title)
-                    .font(.system(size: 10, weight: .semibold, design: .rounded))
-            }
+            DynamicTabButtonLabel(text: tab.title, systemName: tab.systemName)
         }
         .foregroundColor(selectionWrapper.selection == tab ? .accentColor : .gray)
         .padding(.vertical, 8)
@@ -42,16 +51,100 @@ struct DynamicTabItemButton: View {
     }
 }
 
-struct DynamicTabBar: View {
-    let tabs: [DynamicTabItem]
+struct DynamicTabMoreList: View {
+    @Binding var tabs: [DynamicTabItem]
+    @Binding var showingPopover: Bool
+    @EnvironmentObject var selectionWrapper: SelectionWrapper
 
     var body: some View {
-        HStack {
+        NavigationStack {
+            List {
+                ForEach(tabs, id: \.self) { tab in
+                    HStack {
+                        Image(systemName: tab.systemName)
+                        Text(tab.title)
+                        Spacer() // to make whole row tappable
+                    }
+                    .border(.white) // to make whole row tappable
+                    .foregroundColor(selectionWrapper.selection == tab ? .accentColor : .gray)
+                    .onTapGesture {
+                        selectionWrapper.selection = tab
+                        showingPopover = false
+                    }
+                }
+                .onMove { from, to in
+                    tabs.move(fromOffsets: from, toOffset: to)
+                }
+            }
+            .toolbar {
+                EditButton()
+            }
+        }
+    }
+}
+
+struct DynamicTabMoreButton: View {
+    @Binding var tabs: [DynamicTabItem]
+    @State var showingPopover = false
+
+    var body: some View {
+        Button {
+            showingPopover = true
+        } label: {
+            DynamicTabButtonLabel(text: "More", systemName: "ellipsis.circle.fill")
+                .popover(isPresented: $showingPopover) {
+                    DynamicTabMoreList(tabs: $tabs, showingPopover: $showingPopover)
+                        .frame(idealWidth: 320, idealHeight: 320)
+                }
+        }
+        .foregroundColor(.gray) // .accentColor
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity)
+    }
+}
+
+struct DynamicTabBarLayout: Layout {
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        return proposal.replacingUnspecifiedDimensions()
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let maximumNumberOfTabs = Int(bounds.width / 64)
+
+        let numberOfTabs = min(maximumNumberOfTabs, subviews.count) - 1
+        if (numberOfTabs < 1) {
+            return
+        }
+        let tabWidth = bounds.width / CGFloat(numberOfTabs)
+        let proposal = ProposedViewSize(width: tabWidth, height: bounds.height)
+
+        for (index, subview) in subviews.enumerated() {
+            func placeAt(index: Int) {
+                subview.place(at: CGPoint(x: bounds.minX + (tabWidth * CGFloat(index)),
+                                          y: bounds.minY), proposal: proposal)
+            }
+
+            if (index < numberOfTabs - 1) {
+                placeAt(index: index)
+            } else if (index == subviews.count - 1) { // more button
+                placeAt(index: numberOfTabs - 1)
+            } else { // excess tabs offscreen
+                placeAt(index: numberOfTabs)
+            }
+        }
+    }
+}
+
+struct DynamicTabBar: View {
+    @Binding var tabs: [DynamicTabItem]
+
+    var body: some View {
+        DynamicTabBarLayout {
             ForEach(tabs, id: \.self) { tab in
                 DynamicTabItemButton(tab: tab)
             }
+            DynamicTabMoreButton(tabs: $tabs)
         }
-        .padding(6)
         .background(Color.white.ignoresSafeArea(edges: .bottom))
     }
 }
@@ -74,7 +167,8 @@ struct DynamicTabView<Content: View>: View {
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .safeAreaInset(edge: .bottom, spacing: 0) {
-                    DynamicTabBar(tabs: tabs)
+                    DynamicTabBar(tabs: $tabs)
+                        .frame(maxHeight: 64)
                 }
         }
         .onPreferenceChange(DynamicTabItemsPreferenceKey.self, perform: { value in
